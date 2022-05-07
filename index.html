@@ -436,6 +436,13 @@
 
 <div class="carousel carousel-slider center index-cover" data-indicators="true" style="margin-top: -64px;">
     
+        <div id="prev-cover" class="left waves-effect carousel-control">
+            <i class="icon fa fa-angle-left"></i>
+        </div>
+        <div id="next-cover" class="right waves-effect carousel-control">
+            <i class="icon fa fa-angle-right"></i>
+        </div>
+    
 
     <div class="carousel-item  white-text bg-cover about-cover">
         <div class="container">
@@ -526,6 +533,33 @@
     </div>
 
     
+        
+
+        
+            
+            <div class="carousel-item amber white-text carousel-post bg-cover"
+                 style="background-image: url('/medias/featureimages/16.jpg');">
+                <div class="container">
+                    <div class="row">
+                        <div class="col s10 offset-s1">
+                            <div class="title center-align">Context-isolation</div>
+                            <div class="description center-align">
+                                
+                                    contextIsolation 上下文隔离上下文隔离是一项功能，可确保你的preload脚本和electron的内部逻辑都在与您加载到webContents，这对于安全目的很重要，因为它有助于防止网站访问Electron内部或您的预加载脚
+                                
+                            </div>
+                            <div class="cover-btns">
+                                <a href="/2022/05/07/context-isolation/" class="waves-effect waves-light btn"
+                                   target="_blank">
+                                    <i class="icon fa fa-eye fa-fw"></i>阅读更多
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+    
 </div>
 
 <script>
@@ -548,7 +582,7 @@
         coverSlider.carousel({
             duration: Number('120'),
             fullWidth: true,
-            indicators: 'false' === 'true',
+            indicators: 'true' === 'true',
             onCycleTo() {
                 if (!initUserPressedOrDraggedActive) {
                     // console.log('initUserPressedOrDraggedActive')
@@ -625,41 +659,6 @@
 
 
 
-
-
-<div class="title"><i class="far fa-thumbs-up"></i>&nbsp;&nbsp;推荐文章</div>
-
-<div class="row">
-
-    
-    
-    <div class="col s12" >
-        
-            <div class="post-card" style="background-image: url('/medias/featureimages/12.jpg')">
-            
-            <div class="post-body">
-                <div class="post-categories">
-                    
-                        
-                            <a href="/categories/HelloWorld/" class="category">HelloWorld</a>
-                        
-                    
-                </div>
-                <a href="/2022/05/05/hello-world/">
-                    <h3 class="post-title">Hello World</h3>
-                </a>
-                <p class="post-description">Welcome to Hexo! This is your very first post. Check documentation for more info. If </p>
-                <a href="/2022/05/05/hello-world/" class="read-more btn waves-effect waves-light" style="background: linear-gradient(to right, #FF5E3A 0%, #FF2A68 100%)" target="_blank">
-                    <i class="icon far fa-eye fa-fw"></i>阅读更多
-                </a>
-            </div>
-        </div>
-    </div>
-    
-
-</div>
-
-
                     </div>
                     
                 </div>
@@ -673,6 +672,295 @@
     <!-- 所有文章卡片 -->
     <article id="articles" class="container articles">
         <div class="row article-row">
+            
+             <!-- 隐藏某个文章 -->
+            <div class="article col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2022/05/07/zheng-ze-xiao-zong-jie/">
+                        <div class="card-image">
+                            
+                            
+                            <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="正则小总结">
+                            
+                            <span class="card-title">正则小总结</span>
+                        </div>
+                    </a>
+
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                
+字符: a b c d 1 2 3 4 etc.
+
+字符类: .[abc] [a-z] \d \w \s
+
+
+. 代表任何字符
+\d 表示“数字”
+\w 表示”字母”, [0-9A-Za-z_]
+\s 表示 “空格, 制表符,回车或换行符
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-05-07
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/%E6%AD%A3%E5%88%99/" class="post-category">
+                                    正则
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/%E6%AD%A3%E5%88%99/">
+                            <span class="chip bg-color">正则</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+              <!-- 隐藏某个文章 -->
+            
+             <!-- 隐藏某个文章 -->
+            <div class="article col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2022/05/07/remote-mo-kuai/">
+                        <div class="card-image">
+                            
+                            
+                            <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="remote模块">
+                            
+                            <span class="card-title">remote模块</span>
+                        </div>
+                    </a>
+
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                remote模块说明remote在electron &gt; 10的版本中已被弃用，最终将被删除
+@electron&#x2F;remote是一个electron模块，它将JavaScript对象从主进程桥接到渲染器进程，这使得我们可以访问
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-05-07
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/Electron/" class="post-category">
+                                    Electron
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/Electron/">
+                            <span class="chip bg-color">Electron</span>
+                        </a>
+                        
+                        <a href="/tags/remote/">
+                            <span class="chip bg-color">remote</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+              <!-- 隐藏某个文章 -->
+            
+             <!-- 隐藏某个文章 -->
+            <div class="article col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2022/05/07/context-isolation/">
+                        <div class="card-image">
+                            
+                            
+                            <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="Context-isolation">
+                            
+                            <span class="card-title">Context-isolation</span>
+                        </div>
+                    </a>
+
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                contextIsolation 上下文隔离上下文隔离是一项功能，可确保你的preload脚本和electron的内部逻辑都在与您加载到webContents，这对于安全目的很重要，因为它有助于防止网站访问Electron内部或您的预加载脚
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-05-07
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/Electron/" class="post-category">
+                                    Electron
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/contextIsolation/">
+                            <span class="chip bg-color">contextIsolation</span>
+                        </a>
+                        
+                        <a href="/tags/%E9%9A%94%E7%A6%BB/">
+                            <span class="chip bg-color">隔离</span>
+                        </a>
+                        
+                        <a href="/tags/node/">
+                            <span class="chip bg-color">node</span>
+                        </a>
+                        
+                        <a href="/tags/Electron/">
+                            <span class="chip bg-color">Electron</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+              <!-- 隐藏某个文章 -->
+            
+             <!-- 隐藏某个文章 -->
+            <div class="article col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2022/05/07/commonjs/">
+                        <div class="card-image">
+                            
+                            
+                            <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="commonJs">
+                            
+                            <span class="card-title">commonJs</span>
+                        </div>
+                    </a>
+
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                commonJs-javascript模块化规范
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-05-07
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/javascript/" class="post-category">
+                                    javascript
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/commonJs/">
+                            <span class="chip bg-color">commonJs</span>
+                        </a>
+                        
+                        <a href="/tags/javascript/">
+                            <span class="chip bg-color">javascript</span>
+                        </a>
+                        
+                        <a href="/tags/nodeJs/">
+                            <span class="chip bg-color">nodeJs</span>
+                        </a>
+                        
+                        <a href="/tags/%E6%A8%A1%E5%9D%97%E5%8C%96/">
+                            <span class="chip bg-color">模块化</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+              <!-- 隐藏某个文章 -->
+            
+             <!-- 隐藏某个文章 -->
+            <div class="article col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2022/05/07/git-cang-ku-xia-mian-ling-yi-ge-clone-guo-lai-de-cang-ku-de-ti-jiao-wen-ti/">
+                        <div class="card-image">
+                            
+                            
+                            <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="git仓库下面另一个clone过来的仓库的提交问题">
+                            
+                            <span class="card-title">git仓库下面另一个clone过来的仓库的提交问题</span>
+                        </div>
+                    </a>
+
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-05-07
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/hexo/" class="post-category">
+                                    hexo
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/hexo/">
+                            <span class="chip bg-color">hexo</span>
+                        </a>
+                        
+                        <a href="/tags/blog/">
+                            <span class="chip bg-color">blog</span>
+                        </a>
+                        
+                        <a href="/tags/%E6%90%AD%E5%BB%BA/">
+                            <span class="chip bg-color">搭建</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+              <!-- 隐藏某个文章 -->
             
              <!-- 隐藏某个文章 -->
             <div class="article col s12 m6 l4" data-aos="zoom-in">
@@ -697,13 +985,33 @@
                             </span>
                             <span class="publish-author">
                                 
-                                <i class="fas fa-user fa-fw"></i>
-                                Nevan
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/hexo/" class="post-category">
+                                    hexo
+                                </a>
+                                
                                 
                             </span>
                         </div>
                     </div>
 
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/hexo/">
+                            <span class="chip bg-color">hexo</span>
+                        </a>
+                        
+                        <a href="/tags/blog/">
+                            <span class="chip bg-color">blog</span>
+                        </a>
+                        
+                        <a href="/tags/%E6%90%AD%E5%BB%BA/">
+                            <span class="chip bg-color">搭建</span>
+                        </a>
+                        
+                    </div>
                     
                 </div>
             </div>
@@ -748,12 +1056,12 @@
                     
                     <div class="card-action article-tags">
                         
-                        <a href="/tags/blog/">
-                            <span class="chip bg-color">blog</span>
-                        </a>
-                        
                         <a href="/tags/hexo/">
                             <span class="chip bg-color">hexo</span>
+                        </a>
+                        
+                        <a href="/tags/blog/">
+                            <span class="chip bg-color">blog</span>
                         </a>
                         
                     </div>

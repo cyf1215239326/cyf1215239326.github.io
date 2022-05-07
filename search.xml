@@ -1,9 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>小白第一次搭建hexo博客记录</title>
-    <url>/2022/05/07/xiao-bai-di-yi-ci-da-jian-hexo-bo-ke-ji-lu/</url>
+    <title>Context-isolation</title>
+    <url>/2022/05/07/context-isolation/</url>
+    <content><![CDATA[<h2 id="contextIsolation-上下文隔离"><a href="#contextIsolation-上下文隔离" class="headerlink" title="contextIsolation 上下文隔离"></a>contextIsolation 上下文隔离</h2><p>上下文隔离是一项功能，可确保你的<code>preload</code>脚本和electron的内部逻辑都在与您加载到<code>webContents</code>，这对于安全目的很重要，因为它有助于防止网站访问Electron内部或您的预加载脚本可以访问强大API。</p>
+<p>这意味着<code>window</code>您的预加载脚本有权访问的对象实际上与网站有权访问的对象不同。例如，如果您<code>window.hello = &#39;wave&#39;</code>在预加载脚本中设置并启用了上下文隔离，<code>window.hello</code>则在网站尝试访问它时将是未定义的。</p>
+<p>自 Electron 12 以来，上下文隔离已默认启用，它是所有应用程序的推荐安全设置。</p>
+<h3 id="迁移"><a href="#迁移" class="headerlink" title="迁移"></a>迁移</h3><h4 id="之前：情境隔离已禁用"><a href="#之前：情境隔离已禁用" class="headerlink" title="之前：情境隔离已禁用"></a>之前：情境隔离已禁用</h4><p>将预加载脚本中的 API 暴露给渲染器进程中加载的网站是一个常见用例。禁用上下文隔离后，您的预加载脚本将window与渲染器共享一个公共全局对象。然后，您可以将任意属性附加到预加载脚本：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// preload.js</span>
+<span class="token comment">// preload with contextIsolation disabled</span>
+window<span class="token punctuation">.</span>myApi<span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+	<span class="token function-variable function">doAThing</span><span class="token operator">:</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">=></span><span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><code>doAThing()</code>然后就可以在渲染进程中使用该函数：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// render.js</span>
+<span class="token comment">// use the exposed API in the renderer</span>
+window<span class="token punctuation">.</span>myApi<span class="token punctuation">.</span><span class="token function">doAThing</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="之后：上下文启用隔离"><a href="#之后：上下文启用隔离" class="headerlink" title="之后：上下文启用隔离"></a>之后：上下文启用隔离</h4><p>Electron中有一个专用模块可以帮助您轻松完成此操作。该<code>contextBridge</code>模块可用于将API从预加载脚本的隔离上下文安全的公开到网站运行的上下文。API也可以<code>window.myAPI</code>像以前一样从网站访问。</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// preload with contextIsolation enabled</span>
+<span class="token keyword">const</span> <span class="token punctuation">&#123;</span> contextBridge <span class="token punctuation">&#125;</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'electron'</span><span class="token punctuation">)</span>
+   contextBridge<span class="token punctuation">.</span><span class="token function">exposeInMainWorld</span><span class="token punctuation">(</span><span class="token string">'myAPI'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
+   	<span class="token function-variable function">doAThing</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
+   <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// render.js</span>
+<span class="token comment">// use the exposed API in the renderer</span>
+window<span class="token punctuation">.</span>myApi<span class="token punctuation">.</span><span class="token function">doAThing</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h4 id="安全注意事项"><a href="#安全注意事项" class="headerlink" title="安全注意事项"></a>安全注意事项</h4><p>仅启用contextIsolation和使用contextBridge并不自动意味着您所做的一切都是安全的。例如，这段代码是不安全的。</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// ❌ Bad code</span>
+   contextBridge<span class="token punctuation">.</span><span class="token function">exposeInMainWorld</span><span class="token punctuation">(</span><span class="token string">'myAPI'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
+   	<span class="token literal-property property">send</span><span class="token operator">:</span> ipcRenderer<span class="token punctuation">.</span>send
+   <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>它直接公开了一个强大的 API，没有任何类型的参数过滤。这将允许任何网站发送您不希望成为可能的任意 IPC 消息。公开基于 IPC 的 API 的正确方法是为每个 IPC 消息提供一种方法。</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// ✅ Good code</span>
+contextBridge<span class="token punctuation">.</span><span class="token function">exposeInMainWorld</span><span class="token punctuation">(</span><span class="token string">'myAPI'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
+	<span class="token function-variable function">loadPreferences</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> ipcRenderer<span class="token punctuation">.</span><span class="token function">invoke</span><span class="token punctuation">(</span><span class="token string">'load-prefs'</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+]]></content>
+      <categories>
+        <category>Electron</category>
+      </categories>
+      <tags>
+        <tag>contextIsolation</tag>
+        <tag>隔离</tag>
+        <tag>node</tag>
+        <tag>Electron</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>commonJs</title>
+    <url>/2022/05/07/commonjs/</url>
+    <content><![CDATA[<h3 id="CommonJS"><a href="#CommonJS" class="headerlink" title="CommonJS"></a>CommonJS</h3><p>长久以来Javascript都不支持模块化，但随着前端工程越来越庞大、复杂，模块的需求也越来越高。为此，社区推出了各种模块化的实现和规范，比如AMD规范、CMD规范和CommonJs规范等。Node.js使用的CommonJs规范，它通过module.export导出模块。演示代码如下：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// 模块文件：module.js</span>
+   module<span class="token punctuation">.</span>export <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+       <span class="token literal-property property">title</span><span class="token operator">:</span><span class="token string">'My name is module'</span>
+       <span class="token function-variable function">say</span><span class="token operator">:</span><span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+           console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'log from module.js'</span><span class="token punctuation">)</span>
+       <span class="token punctuation">&#125;</span>
+   <span class="token punctuation">&#125;</span>
+   <span class="token comment">// 入口文件</span>
+   <span class="token keyword">var</span> myModule <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'./module.js'</span><span class="token punctuation">)</span>
+   myModule<span class="token punctuation">.</span><span class="token function">say</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>myModule<span class="token punctuation">.</span>title<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>把以上代码放到用以目录，在该目录下打开命令行，在命令行执行如下指令：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">&gt; node main<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>最终程序输出</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">&gt; log from module.js
+&gt; My name is module<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>这说明入口程序已经加载了模块module.js,并且能访问此模块下导出的内容，这就是Node.js为开发者提供的模块机制。<br>一旦一个模块被导入运行环境中，就会被缓存。当再次尝试导入这个模块是，就会读取缓存中的内容，而不会重新加载一边这个模块的代码。这种机制不仅避免了重复导入相同模块冲突的问题，还保证了程序的执行效率。</p>
+]]></content>
+      <categories>
+        <category>javascript</category>
+      </categories>
+      <tags>
+        <tag>commonJs</tag>
+        <tag>javascript</tag>
+        <tag>nodeJs</tag>
+        <tag>模块化</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>git仓库下面另一个clone过来的仓库的提交问题</title>
+    <url>/2022/05/07/git-cang-ku-xia-mian-ling-yi-ge-clone-guo-lai-de-cang-ku-de-ti-jiao-wen-ti/</url>
     <content><![CDATA[]]></content>
+      <categories>
+        <category>hexo</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+        <tag>blog</tag>
+        <tag>搭建</tag>
+      </tags>
   </entry>
   <entry>
     <title>Hello World</title>
@@ -26,8 +115,102 @@
         <category>HelloWorld</category>
       </categories>
       <tags>
-        <tag>blog</tag>
         <tag>hexo</tag>
+        <tag>blog</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>remote模块</title>
+    <url>/2022/05/07/remote-mo-kuai/</url>
+    <content><![CDATA[<h1 id="remote模块"><a href="#remote模块" class="headerlink" title="remote模块"></a>remote模块</h1><h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><p>remote在electron &gt; 10的版本中已被弃用，最终将被删除</p>
+<p>@electron&#x2F;remote是一个<code>electron</code>模块，它将JavaScript对象从主进程桥接到渲染器进程，这使得我们可以访问主进程的对象，就像它们在渲染器进程中可用一样。</p>
+<blockquote>
+<p>⚠警告!:这个模块有许多微妙的缺陷。有更好的解决方案比使用此模块更好的方法来完成您的任务。例如<code>ipcRender.invoke</code>可以服务于许多常见的用例</p>
+</blockquote>
+<h2 id="使用此模块的基本步骤"><a href="#使用此模块的基本步骤" class="headerlink" title="使用此模块的基本步骤"></a>使用此模块的基本步骤</h2><ol>
+<li>你需要安装它<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">npm install --save @electron&#x2F;remote<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+<li>初始化在它被渲染进程使用之前<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">&#x2F;&#x2F; in the main process:
+require(&#39;@electron&#x2F;remote&#x2F;main&#39;).initialize()<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+<li>require(‘electron’).remote 替换成 require(‘@electron&#x2F;remote’)<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">&#x2F;&#x2F; in the renderer process:
+&#x2F;&#x2F; Before
+const &#123; BrowserWindow &#125; &#x3D; require(&#39;electron&#39;).remote
+&#x2F;&#x2F; After
+const &#123; BrowserWindow &#125; &#x3D; require(&#39;@electron&#x2F;remote&#39;)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<blockquote>
+<p>注意：由于这需要通过 npm 使用模块而不是内置模块，因此如果您remote从沙盒进程中使用，则需要适当配置您的打包器以打包@electron&#x2F;remote 预加载脚本中的代码。当然，<code>使用@electron/remote会使沙箱的效率大大降低。</code></p>
+</blockquote>
+</li>
+</ol>
+<blockquote>
+<p>注意：在 中<code>electron &gt;= 14.0.0</code>，您必须使用新的<code>enable</code>API 来<code>WebContents</code>分别为每个所需的启用远程模块：require(“@electron&#x2F;remote&#x2F;main”).enable(webContents</p>
+</blockquote>
+<p>在 中electron &lt; 14.0.0，@electron&#x2F;remote尊重WebPreferences的enableRemoteModule 值。您必须传递<code>&#123; webPreferences: &#123; enableRemoteModule: true &#125; &#125;</code>给BrowserWindow应该被授予使用权限 的构造函数@electron&#x2F;remote。</p>
+]]></content>
+      <categories>
+        <category>Electron</category>
+      </categories>
+      <tags>
+        <tag>Electron</tag>
+        <tag>remote</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>小白第一次搭建hexo博客记录</title>
+    <url>/2022/05/07/xiao-bai-di-yi-ci-da-jian-hexo-bo-ke-ji-lu/</url>
+    <content><![CDATA[]]></content>
+      <categories>
+        <category>hexo</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+        <tag>blog</tag>
+        <tag>搭建</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>正则小总结</title>
+    <url>/2022/05/07/zheng-ze-xiao-zong-jie/</url>
+    <content><![CDATA[<ul>
+<li><p>字符: <code>a b c d 1 2 3 4</code> etc.</p>
+</li>
+<li><p>字符类: <code>.[abc] [a-z] \d \w \s</code></p>
+</li>
+<li><ul>
+<li><code>.</code> 代表任何字符</li>
+<li><code>\d 表示</code>“数字”</li>
+<li><code>\w</code> 表示”字母”, <code>[0-9A-Za-z_]</code></li>
+<li><code>\s </code>表示 “空格, 制表符,回车或换行符”</li>
+<li>否定字符类: <code>[^abc] \D \W \S</code></li>
+</ul>
+</li>
+<li><p>重复: <code>&#123;4&#125; &#123;3,16&#125; &#123;1,&#125; ? * +</code></p>
+</li>
+<li><ul>
+<li><code>?</code> 表示 “零次或一次”</li>
+<li><code>*</code> 表示 “大于零次”</li>
+<li><code>+</code> 表示 “一次或一次以上”</li>
+<li>如果不加上？，所有的重复都是最长匹配的（贪婪）</li>
+</ul>
+</li>
+<li><p>分组: <code>(Septem|Octo|Novem|Decem)ber</code></p>
+</li>
+<li><p>词，行以及文本的分隔: <code>\b ^ $ \A \z</code></p>
+</li>
+<li><p>转义字符: <code>\1 \2 \3</code> etc. (在匹配表达式和替换表达式中都可用)</p>
+</li>
+<li><p>元字符: <code>. \ [ ] &#123; &#125; ? * + | ( ) ^ $</code></p>
+</li>
+<li><p>在字符类中使用元字符: <code>[ ] \ -``^</code></p>
+</li>
+<li><p>使用反斜杠可以忽略元字符: <code>\</code></p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>正则</category>
+      </categories>
+      <tags>
+        <tag>正则</tag>
       </tags>
   </entry>
 </search>
