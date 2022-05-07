@@ -96,7 +96,7 @@ contextBridge<span class="token punctuation">.</span><span class="token function
   </entry>
   <entry>
     <title>Hello World</title>
-    <url>/2022/05/05/hello-world/</url>
+    <url>/2022/05/07/hello-world/</url>
     <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
 <h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo new &quot;My New Post&quot;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
@@ -158,14 +158,6 @@ const &#123; BrowserWindow &#125; &#x3D; require(&#39;@electron&#x2F;remote&#39;
     <title>小白第一次搭建hexo博客记录</title>
     <url>/2022/05/07/xiao-bai-di-yi-ci-da-jian-hexo-bo-ke-ji-lu/</url>
     <content><![CDATA[]]></content>
-      <categories>
-        <category>hexo</category>
-      </categories>
-      <tags>
-        <tag>hexo</tag>
-        <tag>blog</tag>
-        <tag>搭建</tag>
-      </tags>
   </entry>
   <entry>
     <title>正则小总结</title>
