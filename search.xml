@@ -50,6 +50,19 @@ contextBridge<span class="token punctuation">.</span><span class="token function
       </tags>
   </entry>
   <entry>
+    <title>git仓库下面另一个clone过来的仓库的提交问题</title>
+    <url>/2022/05/07/git-cang-ku-xia-mian-ling-yi-ge-clone-guo-lai-de-cang-ku-de-ti-jiao-wen-ti/</url>
+    <content><![CDATA[]]></content>
+      <categories>
+        <category>hexo</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+        <tag>blog</tag>
+        <tag>搭建</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>commonJs</title>
     <url>/2022/05/07/commonjs/</url>
     <content><![CDATA[<h3 id="CommonJS"><a href="#CommonJS" class="headerlink" title="CommonJS"></a>CommonJS</h3><p>长久以来Javascript都不支持模块化，但随着前端工程越来越庞大、复杂，模块的需求也越来越高。为此，社区推出了各种模块化的实现和规范，比如AMD规范、CMD规范和CommonJs规范等。Node.js使用的CommonJs规范，它通过module.export导出模块。演示代码如下：</p>
@@ -79,19 +92,6 @@ contextBridge<span class="token punctuation">.</span><span class="token function
         <tag>javascript</tag>
         <tag>nodeJs</tag>
         <tag>模块化</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>git仓库下面另一个clone过来的仓库的提交问题</title>
-    <url>/2022/05/07/git-cang-ku-xia-mian-ling-yi-ge-clone-guo-lai-de-cang-ku-de-ti-jiao-wen-ti/</url>
-    <content><![CDATA[]]></content>
-      <categories>
-        <category>hexo</category>
-      </categories>
-      <tags>
-        <tag>hexo</tag>
-        <tag>blog</tag>
-        <tag>搭建</tag>
       </tags>
   </entry>
   <entry>
