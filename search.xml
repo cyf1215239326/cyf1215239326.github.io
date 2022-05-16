@@ -90,7 +90,7 @@
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">></span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p><img src="/.io//BFC1.png" alt="img"></p>
+<p><img src="/2022/05/16/bfc/BFC1.png" alt="BFC1"></p>
 <p>在这个例子中，构建出BFC的只有class名为green的盒子（浮动元素）</p>
 <p>green盒子由于浮动，脱离普通文档流,形成浮动流。他好像跟其他两个盒子不在同一个世界一样。</p>
 <p>现在普通文档流中只有gray和red盒子，所以gray的高度只被red撑起来。红色盒子也无视绿色盒子的存在，跑到了最左边。</p>
@@ -101,9 +101,9 @@
 
   overflow: hidden;
 &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p><img src="/.io//BFC2.png" alt="img"></p>
+<p><img src="/2022/05/16/bfc/BFC2.png" alt="BFC2"></p>
 <p>还记得BFC的特性吗？当我们计算BFC的高度时，浮动子元素也参与计算。这样一来我们就能灰色盒子的高度被绿色盒子撑开了。</p>
-<h2 id="实例3"><a href="#实例3" class="headerlink" title="实例3"></a>实例3</h2><p>我们再来看看如何让红色盒子“接受”绿色盒子</p>
+<h2 id="实例三"><a href="#实例三" class="headerlink" title="实例三"></a>实例三</h2><p>我们再来看看如何让红色盒子“接受”绿色盒子</p>
 <pre class="line-numbers language-markup" data-language="markup"><code class="language-markup">.red &#123;
   background: #EF5BE2;
   opacity: 0.5;
@@ -113,7 +113,7 @@
 
   overflow: hidden;
 &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p><img src="/.io//BFC3.png" alt="img"></p>
+<p><img src="/2022/05/16/bfc/BFC3.png" alt="BFC3"></p>
 <p>我们将红色盒子也构建出BFC，根据特性，形成BFC区域与float box不会发生重叠。于是这里红色成功“接受”了绿色盒子。</p>
 ]]></content>
       <categories>
@@ -253,31 +253,6 @@ D:\blog\nevan-blog&gt;<span aria-hidden="true" class="line-numbers-rows"><span><
       </tags>
   </entry>
   <entry>
-    <title>Hello World</title>
-    <url>/2022/05/07/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo new &quot;My New Post&quot;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo server<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo generate<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo deploy<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
-      <categories>
-        <category>Helloworld</category>
-      </categories>
-      <tags>
-        <tag>hexo</tag>
-        <tag>blog</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>remote模块</title>
     <url>/2022/05/07/remote-mo-kuai/</url>
     <content><![CDATA[<h1 id="remote模块"><a href="#remote模块" class="headerlink" title="remote模块"></a>remote模块</h1><h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><p>remote在electron &gt; 10的版本中已被弃用，最终将被删除</p>
@@ -316,6 +291,31 @@ const &#123; BrowserWindow &#125; &#x3D; require(&#39;@electron&#x2F;remote&#39;
     <title>小白第一次搭建hexo博客记录</title>
     <url>/2022/05/07/xiao-bai-di-yi-ci-da-jian-hexo-bo-ke-ji-lu/</url>
     <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2022/05/07/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo new &quot;My New Post&quot;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo server<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo generate<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo deploy<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+      <categories>
+        <category>Helloworld</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+        <tag>blog</tag>
+      </tags>
   </entry>
   <entry>
     <title>正则小总结</title>
