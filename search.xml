@@ -1,55 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Context-isolation</title>
-    <url>/2022/05/07/context-isolation/</url>
-    <content><![CDATA[<h2 id="contextIsolation-上下文隔离"><a href="#contextIsolation-上下文隔离" class="headerlink" title="contextIsolation 上下文隔离"></a>contextIsolation 上下文隔离</h2><p>上下文隔离是一项功能，可确保你的<code>preload</code>脚本和electron的内部逻辑都在与您加载到<code>webContents</code>，这对于安全目的很重要，因为它有助于防止网站访问Electron内部或您的预加载脚本可以访问强大API。</p>
-<p>这意味着<code>window</code>您的预加载脚本有权访问的对象实际上与网站有权访问的对象不同。例如，如果您<code>window.hello = &#39;wave&#39;</code>在预加载脚本中设置并启用了上下文隔离，<code>window.hello</code>则在网站尝试访问它时将是未定义的。</p>
-<p>自 Electron 12 以来，上下文隔离已默认启用，它是所有应用程序的推荐安全设置。</p>
-<h3 id="迁移"><a href="#迁移" class="headerlink" title="迁移"></a>迁移</h3><h4 id="之前：情境隔离已禁用"><a href="#之前：情境隔离已禁用" class="headerlink" title="之前：情境隔离已禁用"></a>之前：情境隔离已禁用</h4><p>将预加载脚本中的 API 暴露给渲染器进程中加载的网站是一个常见用例。禁用上下文隔离后，您的预加载脚本将window与渲染器共享一个公共全局对象。然后，您可以将任意属性附加到预加载脚本：</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// preload.js</span>
-<span class="token comment">// preload with contextIsolation disabled</span>
-window<span class="token punctuation">.</span>myApi<span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-	<span class="token function-variable function">doAThing</span><span class="token operator">:</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">=></span><span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p><code>doAThing()</code>然后就可以在渲染进程中使用该函数：</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// render.js</span>
-<span class="token comment">// use the exposed API in the renderer</span>
-window<span class="token punctuation">.</span>myApi<span class="token punctuation">.</span><span class="token function">doAThing</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<h4 id="之后：上下文启用隔离"><a href="#之后：上下文启用隔离" class="headerlink" title="之后：上下文启用隔离"></a>之后：上下文启用隔离</h4><p>Electron中有一个专用模块可以帮助您轻松完成此操作。该<code>contextBridge</code>模块可用于将API从预加载脚本的隔离上下文安全的公开到网站运行的上下文。API也可以<code>window.myAPI</code>像以前一样从网站访问。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// preload with contextIsolation enabled</span>
-<span class="token keyword">const</span> <span class="token punctuation">&#123;</span> contextBridge <span class="token punctuation">&#125;</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'electron'</span><span class="token punctuation">)</span>
-   contextBridge<span class="token punctuation">.</span><span class="token function">exposeInMainWorld</span><span class="token punctuation">(</span><span class="token string">'myAPI'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-   	<span class="token function-variable function">doAThing</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
-   <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// render.js</span>
-<span class="token comment">// use the exposed API in the renderer</span>
-window<span class="token punctuation">.</span>myApi<span class="token punctuation">.</span><span class="token function">doAThing</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-<h4 id="安全注意事项"><a href="#安全注意事项" class="headerlink" title="安全注意事项"></a>安全注意事项</h4><p>仅启用contextIsolation和使用contextBridge并不自动意味着您所做的一切都是安全的。例如，这段代码是不安全的。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// ❌ Bad code</span>
-   contextBridge<span class="token punctuation">.</span><span class="token function">exposeInMainWorld</span><span class="token punctuation">(</span><span class="token string">'myAPI'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-   	<span class="token literal-property property">send</span><span class="token operator">:</span> ipcRenderer<span class="token punctuation">.</span>send
-   <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<p>它直接公开了一个强大的 API，没有任何类型的参数过滤。这将允许任何网站发送您不希望成为可能的任意 IPC 消息。公开基于 IPC 的 API 的正确方法是为每个 IPC 消息提供一种方法。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// ✅ Good code</span>
-contextBridge<span class="token punctuation">.</span><span class="token function">exposeInMainWorld</span><span class="token punctuation">(</span><span class="token string">'myAPI'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
-	<span class="token function-variable function">loadPreferences</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> ipcRenderer<span class="token punctuation">.</span><span class="token function">invoke</span><span class="token punctuation">(</span><span class="token string">'load-prefs'</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-]]></content>
-      <categories>
-        <category>Electron</category>
-      </categories>
-      <tags>
-        <tag>contextIsolation</tag>
-        <tag>隔离</tag>
-        <tag>node</tag>
-        <tag>Electron</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>BFC</title>
     <url>/2022/05/16/bfc/</url>
     <content><![CDATA[<h1 id="完全弄懂-BFC"><a href="#完全弄懂-BFC" class="headerlink" title="完全弄懂 BFC"></a>完全弄懂 BFC</h1><p>BFC 全称是 Block Formatting Context，即块级格式化上下文。</p>
@@ -175,6 +126,55 @@ contextBridge<span class="token punctuation">.</span><span class="token function
       </tags>
   </entry>
   <entry>
+    <title>Context-isolation</title>
+    <url>/2022/05/07/context-isolation/</url>
+    <content><![CDATA[<h2 id="contextIsolation-上下文隔离"><a href="#contextIsolation-上下文隔离" class="headerlink" title="contextIsolation 上下文隔离"></a>contextIsolation 上下文隔离</h2><p>上下文隔离是一项功能，可确保你的<code>preload</code>脚本和electron的内部逻辑都在与您加载到<code>webContents</code>，这对于安全目的很重要，因为它有助于防止网站访问Electron内部或您的预加载脚本可以访问强大API。</p>
+<p>这意味着<code>window</code>您的预加载脚本有权访问的对象实际上与网站有权访问的对象不同。例如，如果您<code>window.hello = &#39;wave&#39;</code>在预加载脚本中设置并启用了上下文隔离，<code>window.hello</code>则在网站尝试访问它时将是未定义的。</p>
+<p>自 Electron 12 以来，上下文隔离已默认启用，它是所有应用程序的推荐安全设置。</p>
+<h3 id="迁移"><a href="#迁移" class="headerlink" title="迁移"></a>迁移</h3><h4 id="之前：情境隔离已禁用"><a href="#之前：情境隔离已禁用" class="headerlink" title="之前：情境隔离已禁用"></a>之前：情境隔离已禁用</h4><p>将预加载脚本中的 API 暴露给渲染器进程中加载的网站是一个常见用例。禁用上下文隔离后，您的预加载脚本将window与渲染器共享一个公共全局对象。然后，您可以将任意属性附加到预加载脚本：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// preload.js</span>
+<span class="token comment">// preload with contextIsolation disabled</span>
+window<span class="token punctuation">.</span>myApi<span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+	<span class="token function-variable function">doAThing</span><span class="token operator">:</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">=></span><span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><code>doAThing()</code>然后就可以在渲染进程中使用该函数：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// render.js</span>
+<span class="token comment">// use the exposed API in the renderer</span>
+window<span class="token punctuation">.</span>myApi<span class="token punctuation">.</span><span class="token function">doAThing</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="之后：上下文启用隔离"><a href="#之后：上下文启用隔离" class="headerlink" title="之后：上下文启用隔离"></a>之后：上下文启用隔离</h4><p>Electron中有一个专用模块可以帮助您轻松完成此操作。该<code>contextBridge</code>模块可用于将API从预加载脚本的隔离上下文安全的公开到网站运行的上下文。API也可以<code>window.myAPI</code>像以前一样从网站访问。</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// preload with contextIsolation enabled</span>
+<span class="token keyword">const</span> <span class="token punctuation">&#123;</span> contextBridge <span class="token punctuation">&#125;</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'electron'</span><span class="token punctuation">)</span>
+   contextBridge<span class="token punctuation">.</span><span class="token function">exposeInMainWorld</span><span class="token punctuation">(</span><span class="token string">'myAPI'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
+   	<span class="token function-variable function">doAThing</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
+   <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// render.js</span>
+<span class="token comment">// use the exposed API in the renderer</span>
+window<span class="token punctuation">.</span>myApi<span class="token punctuation">.</span><span class="token function">doAThing</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h4 id="安全注意事项"><a href="#安全注意事项" class="headerlink" title="安全注意事项"></a>安全注意事项</h4><p>仅启用contextIsolation和使用contextBridge并不自动意味着您所做的一切都是安全的。例如，这段代码是不安全的。</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// ❌ Bad code</span>
+   contextBridge<span class="token punctuation">.</span><span class="token function">exposeInMainWorld</span><span class="token punctuation">(</span><span class="token string">'myAPI'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
+   	<span class="token literal-property property">send</span><span class="token operator">:</span> ipcRenderer<span class="token punctuation">.</span>send
+   <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>它直接公开了一个强大的 API，没有任何类型的参数过滤。这将允许任何网站发送您不希望成为可能的任意 IPC 消息。公开基于 IPC 的 API 的正确方法是为每个 IPC 消息提供一种方法。</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// ✅ Good code</span>
+contextBridge<span class="token punctuation">.</span><span class="token function">exposeInMainWorld</span><span class="token punctuation">(</span><span class="token string">'myAPI'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
+	<span class="token function-variable function">loadPreferences</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> ipcRenderer<span class="token punctuation">.</span><span class="token function">invoke</span><span class="token punctuation">(</span><span class="token string">'load-prefs'</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+]]></content>
+      <categories>
+        <category>Electron</category>
+      </categories>
+      <tags>
+        <tag>contextIsolation</tag>
+        <tag>隔离</tag>
+        <tag>node</tag>
+        <tag>Electron</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>commonJs</title>
     <url>/2022/05/07/commonjs/</url>
     <content><![CDATA[<h3 id="CommonJS"><a href="#CommonJS" class="headerlink" title="CommonJS"></a>CommonJS</h3><p>长久以来Javascript都不支持模块化，但随着前端工程越来越庞大、复杂，模块的需求也越来越高。为此，社区推出了各种模块化的实现和规范，比如AMD规范、CMD规范和CommonJs规范等。Node.js使用的CommonJs规范，它通过module.export导出模块。演示代码如下：</p>
@@ -204,31 +204,6 @@ contextBridge<span class="token punctuation">.</span><span class="token function
         <tag>javascript</tag>
         <tag>nodeJs</tag>
         <tag>模块化</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Hello World</title>
-    <url>/2022/05/07/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo new &quot;My New Post&quot;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo server<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo generate<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo deploy<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
-      <categories>
-        <category>Helloworld</category>
-      </categories>
-      <tags>
-        <tag>blog</tag>
-        <tag>hexo</tag>
       </tags>
   </entry>
   <entry>
@@ -271,10 +246,35 @@ D:\blog\nevan-blog&gt;<span aria-hidden="true" class="line-numbers-rows"><span><
         <category>Hexo</category>
       </categories>
       <tags>
-        <tag>blog</tag>
         <tag>hexo</tag>
+        <tag>blog</tag>
         <tag>搭建</tag>
         <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2022/05/07/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo new &quot;My New Post&quot;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo server<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo generate<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo deploy<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+      <categories>
+        <category>Helloworld</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+        <tag>blog</tag>
       </tags>
   </entry>
   <entry>
