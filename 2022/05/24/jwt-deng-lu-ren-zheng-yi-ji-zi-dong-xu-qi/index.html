@@ -575,12 +575,15 @@
 <h2 id="续签"><a href="#续签" class="headerlink" title="续签"></a>续签</h2><p>如果使用 JWT 做会话管理，传统的 cookie 续签方案一般都是框架自带的，session 有效期 30 分钟，30 分钟内如果有访问，有效期被刷新至 30 分钟。一样的道理，要改变 JWT 的有效时间，就要签发新的 JWT。</p>
 <p>最简单的一种方式是每次请求刷新 JWT，即每个 HTTP 请求都返回一个新的 JWT。这个方法不仅暴力不优雅，而且每次请求都要做 JWT 的加密解密，会带来性能问题。另一种方法是在 redis 中单独为每个 JWT 设置过期时间，每次访问时刷新 JWT 的过期时间</p>
 <h2 id="选择-JWT-或-session"><a href="#选择-JWT-或-session" class="headerlink" title="选择 JWT 或 session"></a>选择 JWT 或 session</h2><p>我投 JWT 一票，JWT 有很多缺点，但是在分布式环境下不需要像 session 一样额外实现多机数据共享，虽然 seesion 的多机数据共享可以通过粘性 session、session 共享、session 复制、持久化 session、terracoa 实现 seesion 复制等多种成熟的方案来解决这个问题。但是 JWT 不需要额外的工作，使用 JWT 不香吗？且 JWT 一次性的缺点可以结合 redis 进行弥补。</p>
-<h2 id="功能实现"><a href="#功能实现" class="headerlink" title="功能实现"></a>功能实现</h2><h3 id="JWT-所需依赖"><a href="#JWT-所需依赖" class="headerlink" title="JWT 所需依赖"></a>JWT 所需依赖</h3><p>&#96;&#96;xml<br><dependency><br><groupId>com.auth0</groupId><br><artifactId>java-jwt</artifactId><br><version>3.10.3</version><br></dependency></p>
-<pre class="line-numbers language-none"><code class="language-none">
-### JWT工具类
+<h2 id="功能实现"><a href="#功能实现" class="headerlink" title="功能实现"></a>功能实现</h2><h3 id="JWT-所需依赖"><a href="#JWT-所需依赖" class="headerlink" title="JWT 所需依赖"></a>JWT 所需依赖</h3><pre class="line-numbers language-markup" data-language="markup"><code class="language-markup">
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>com.auth0<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>java-jwt<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>3.10.3<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-&#96;&#96;&#96;java
-public class JWTUtil &#123;
+<h3 id="JWT工具类"><a href="#JWT工具类" class="headerlink" title="JWT工具类"></a>JWT工具类</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java">public class JWTUtil &#123;
     private static final Logger logger &#x3D; LoggerFactory.getLogger(JWTUtil.class);
 
     &#x2F;&#x2F;私钥
@@ -625,13 +628,18 @@ public class JWTUtil &#123;
         String tokenInfo &#x3D; jwt.getClaim(&quot;token&quot;).asString();
         return JSON.parseObject(tokenInfo, UserTokenDTO.class);
     &#125;
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+&#125;
+&#96;&#96;&#96;&#96;
 
-<h4 id="说明："><a href="#说明：" class="headerlink" title="说明："></a>说明：</h4><ul>
-<li>生成的 token 中不带有过期时间，token 的过期时间由 redis 进行管理</li>
-<li>UserTokenDTO 中不带有敏感信息，如 password 字段不会出现在 token 中</li>
-</ul>
-<h3 id="Redis-工具类"><a href="#Redis-工具类" class="headerlink" title="Redis 工具类"></a>Redis 工具类</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java">public final class RedisServiceImpl implements RedisService &#123;
+#### 说明：
+
+- 生成的 token 中不带有过期时间，token 的过期时间由 redis 进行管理
+- UserTokenDTO 中不带有敏感信息，如 password 字段不会出现在 token 中
+
+### Redis 工具类
+
+&#96;&#96;&#96;java
+public final class RedisServiceImpl implements RedisService &#123;
     &#x2F;**
      * 过期时长
      *&#x2F;
@@ -676,7 +684,7 @@ public class JWTUtil &#123;
     public Long getExpireTime(String key) &#123;
         return valueOperations.getOperations().getExpire(key);
     &#125;
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>RedisTemplate 简单封装</p>
 <h2 id="业务实现"><a href="#业务实现" class="headerlink" title="业务实现"></a>业务实现</h2><h3 id="登陆功能"><a href="#登陆功能" class="headerlink" title="登陆功能"></a>登陆功能</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java">public String login(LoginUserVO loginUserVO) &#123;
@@ -701,7 +709,7 @@ public class JWTUtil &#123;
     return token;
 &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h4 id="说明：-1"><a href="#说明：-1" class="headerlink" title="说明："></a>说明：</h4><ul>
+<h4 id="说明："><a href="#说明：" class="headerlink" title="说明："></a>说明：</h4><ul>
 <li>判断用户名密码是否正确</li>
 <li>用户名密码正确则生成 token</li>
 <li>将生成的 token 保存至 redis</li>
@@ -764,7 +772,7 @@ public class JWTUtil &#123;
     return true;
 &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h4 id="说明：-2"><a href="#说明：-2" class="headerlink" title="说明："></a>说明：</h4><p>拦截器中主要做两件事，一是对 token 进行校验，二是判断 token 是否需要进行续期</p>
+<h4 id="说明：-1"><a href="#说明：-1" class="headerlink" title="说明："></a>说明：</h4><p>拦截器中主要做两件事，一是对 token 进行校验，二是判断 token 是否需要进行续期</p>
 <h5 id="token-校验："><a href="#token-校验：" class="headerlink" title="token 校验："></a>token 校验：</h5><ul>
 <li>判断 id 对应的 token 是否不存在，不存在则 token 过期</li>
 <li>若 token 存在则比较 token 是否一致，保证同一时间只有一个用户操作</li>
