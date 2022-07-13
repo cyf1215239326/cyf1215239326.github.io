@@ -4,9 +4,19 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="JWT登录认证以及自动续期, NEVAN&#39;S BLOG">
-    <meta name="description" content="技术选型要实现认证功能，很容易就会想到 JWT 或者 session，但是两者有啥区别？各自的优缺点？应该 Pick 谁？夺命三连
-区别基于 session 和基于 JWT 的方式的主要区别就是用户的状态保存的位置，session 是保存在">
+    <meta name="keywords" content="springboot面试题目, NEVAN&#39;S BLOG">
+    <meta name="description" content="springboot 面试题目
+描述一下 springboot 的作用
+
+
+自动依赖管理
+
+在 Springboot-dependency 中定义各种 jar 包的版本，进行导入，省去自己去导入的过程
+
+
+自动配置原理
+
+springboo">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -20,7 +30,7 @@
 
     
 
-    <title>JWT登录认证以及自动续期 | NEVAN&#39;S BLOG</title>
+    <title>springboot面试题目 | NEVAN&#39;S BLOG</title>
     <link rel="icon" type="image/png" href="https://cdn.jsdelivr.net/gh/cyf1215239326/cyf1215239326.github.io/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/cyf1215239326/cyf1215239326.github.io/libs/awesome/css/all.min.css">
@@ -357,12 +367,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('https://cdn.jsdelivr.net/gh/cyf1215239326/cyf1215239326.github.io/medias/featureimages/11.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('https://cdn.jsdelivr.net/gh/cyf1215239326/cyf1215239326.github.io/medias/featureimages/7.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">JWT登录认证以及自动续期</h1>
+                    <h1 class="description center-align post-title">springboot面试题目</h1>
                 </div>
             </div>
         </div>
@@ -478,20 +488,12 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/jwt/">
-                                <span class="chip bg-color">jwt</span>
-                            </a>
-                        
-                            <a href="/tags/%E8%87%AA%E5%8A%A8%E7%BB%AD%E6%9C%9F/">
-                                <span class="chip bg-color">自动续期</span>
-                            </a>
-                        
                             <a href="/tags/java/">
                                 <span class="chip bg-color">java</span>
                             </a>
                         
-                            <a href="/tags/oauth/">
-                                <span class="chip bg-color">oauth</span>
+                            <a href="/tags/springboot/">
+                                <span class="chip bg-color">springboot</span>
                             </a>
                         
                     </div>
@@ -502,8 +504,12 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/JWT/" class="post-category">
-                                JWT
+                            <a href="/categories/java/" class="post-category">
+                                java
+                            </a>
+                        
+                            <a href="/categories/java/springboot/" class="post-category">
+                                springboot
                             </a>
                         
                     </div>
@@ -515,7 +521,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2022-05-24
+                    2022-07-13
                 </div>
                 
 
@@ -530,7 +536,7 @@
             <div class="post-info">
                 <div class="post-date info-break-policy">
                     <i class="fa fa-calendar-minus-o fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2022-05-24
+                    2022-07-13
                 </div>
 
                 <div class="post-author info-break-policy">
@@ -552,241 +558,43 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="技术选型"><a href="#技术选型" class="headerlink" title="技术选型"></a>技术选型</h2><p>要实现认证功能，很容易就会想到 JWT 或者 session，但是两者有啥区别？各自的优缺点？应该 Pick 谁？夺命三连</p>
-<h2 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h2><p>基于 session 和基于 JWT 的方式的主要区别就是用户的状态保存的位置，session 是保存在服务端的，而 JWT 是保存在客户端的</p>
-<h2 id="认证流程"><a href="#认证流程" class="headerlink" title="认证流程"></a>认证流程</h2><p>基于 session 的认证流程</p>
+                <h1 id="springboot-面试题目"><a href="#springboot-面试题目" class="headerlink" title="springboot 面试题目"></a>springboot 面试题目</h1><ol>
+<li>描述一下 springboot 的作用</li>
+</ol>
 <ul>
-<li>用户在浏览器中输入用户名和密码，服务器通过密码校验后生成一个 session 并保存到数据库</li>
-<li>服务器为用户生成一个 sessionId，并将具有 sesssionId 的 cookie 放置在用户浏览器中，在后续的请求中都将带有这个 cookie 信息进行访问</li>
-<li>服务器获取 cookie，通过获取 cookie 中的 sessionId 查找数据库判断当前请求是否有效</li>
-</ul>
-<p>基于 JWT 的认证流程</p>
+<li><p>自动依赖管理</p>
 <ul>
-<li>用户在浏览器中输入用户名和密码，服务器通过密码校验后生成一个 token 并保存到数据库</li>
-<li>前端获取到 token，存储到 cookie 或者 local storage 中，在后续的请求中都将带有这个 token 信息进行访问</li>
-<li>服务器获取 token 值，通过查找数据库判断当前 token 是否有效</li>
+<li>在 Springboot-dependency 中定义各种 jar 包的版本，进行导入，省去自己去导入的过程</li>
 </ul>
-<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><p>JWT 保存在客户端，在分布式环境下不需要做额外工作。而 session 因为保存在服务端，分布式环境下需要实现多机数据共享 session 一般需要结合 Cookie 实现认证，所以需要浏览器支持 cookie，因此移动端无法使用 session 认证方案</p>
-<h2 id="安全性"><a href="#安全性" class="headerlink" title="安全性"></a>安全性</h2><p>JWT 的 payload 使用的是 base64 编码的，因此在 JWT 中不能存储敏感数据。而 session 的信息是存在服务端的，相对来说更安全</p>
-<p>如果在 JWT 中存储了敏感信息，可以解码出来非常的不安全</p>
-<h2 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h2><p>经过编码之后 JWT 将非常长，cookie 的限制大小一般是 4k，cookie 很可能放不下，所以 JWT 一般放在 local storage 里面。并且用户在系统中的每一次 http 请求都会把 JWT 携带在 Header 里面，HTTP 请求的 Header 可能比 Body 还要大。而 sessionId 只是很短的一个字符串，因此使用 JWT 的 HTTP 请求比使用 session 的开销大得多</p>
-<h2 id="一次性"><a href="#一次性" class="headerlink" title="一次性"></a>一次性</h2><p>无状态是 JWT 的特点，但也导致了这个问题，JWT 是一次性的。想修改里面的内容，就必须签发一个新的 JWT</p>
-<h2 id="无法废弃"><a href="#无法废弃" class="headerlink" title="无法废弃"></a>无法废弃</h2><p>一旦签发一个 JWT，在到期之前就会始终有效，无法中途废弃。若想废弃，一种常用的处理手段是结合 redis</p>
-<h2 id="续签"><a href="#续签" class="headerlink" title="续签"></a>续签</h2><p>如果使用 JWT 做会话管理，传统的 cookie 续签方案一般都是框架自带的，session 有效期 30 分钟，30 分钟内如果有访问，有效期被刷新至 30 分钟。一样的道理，要改变 JWT 的有效时间，就要签发新的 JWT。</p>
-<p>最简单的一种方式是每次请求刷新 JWT，即每个 HTTP 请求都返回一个新的 JWT。这个方法不仅暴力不优雅，而且每次请求都要做 JWT 的加密解密，会带来性能问题。另一种方法是在 redis 中单独为每个 JWT 设置过期时间，每次访问时刷新 JWT 的过期时间</p>
-<h2 id="选择-JWT-或-session"><a href="#选择-JWT-或-session" class="headerlink" title="选择 JWT 或 session"></a>选择 JWT 或 session</h2><p>我投 JWT 一票，JWT 有很多缺点，但是在分布式环境下不需要像 session 一样额外实现多机数据共享，虽然 seesion 的多机数据共享可以通过粘性 session、session 共享、session 复制、持久化 session、terracoa 实现 seesion 复制等多种成熟的方案来解决这个问题。但是 JWT 不需要额外的工作，使用 JWT 不香吗？且 JWT 一次性的缺点可以结合 redis 进行弥补。</p>
-<h2 id="功能实现"><a href="#功能实现" class="headerlink" title="功能实现"></a>功能实现</h2><h3 id="JWT-所需依赖"><a href="#JWT-所需依赖" class="headerlink" title="JWT 所需依赖"></a>JWT 所需依赖</h3><pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>com.auth0<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>java-jwt<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>3.10.3<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="JWT-工具类"><a href="#JWT-工具类" class="headerlink" title="JWT 工具类"></a>JWT 工具类</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java">public class JWTUtil &#123;
-    private static final Logger logger &#x3D; LoggerFactory.getLogger(JWTUtil.class);
-
-    &#x2F;&#x2F;私钥
-    private static final String TOKEN_SECRET &#x3D; &quot;123456&quot;;
-
-    &#x2F;**
-     * 生成token，自定义过期时间 毫秒
-     *
-     * @param userTokenDTO
-     * @return
-     *&#x2F;
-    public static String generateToken(UserTokenDTO userTokenDTO) &#123;
-        try &#123;
-            &#x2F;&#x2F; 私钥和加密算法
-            Algorithm algorithm &#x3D; Algorithm.HMAC256(TOKEN_SECRET);
-            &#x2F;&#x2F; 设置头部信息
-            Map&lt;String, Object&gt; header &#x3D; new HashMap&lt;&gt;(2);
-            header.put(&quot;Type&quot;, &quot;Jwt&quot;);
-            header.put(&quot;alg&quot;, &quot;HS256&quot;);
-
-            return JWT.create()
-                    .withHeader(header)
-                    .withClaim(&quot;token&quot;, JSONObject.toJSONString(userTokenDTO))
-                    &#x2F;&#x2F;.withExpiresAt(date)
-                    .sign(algorithm);
-        &#125; catch (Exception e) &#123;
-            logger.error(&quot;generate token occur error, error is:&#123;&#125;&quot;, e);
-            return null;
-        &#125;
-    &#125;
-
-    &#x2F;**
-     * 检验token是否正确
-     *
-     * @param token
-     * @return
-     *&#x2F;
-    public static UserTokenDTO parseToken(String token) &#123;
-        Algorithm algorithm &#x3D; Algorithm.HMAC256(TOKEN_SECRET);
-        JWTVerifier verifier &#x3D; JWT.require(algorithm).build();
-        DecodedJWT jwt &#x3D; verifier.verify(token);
-        String tokenInfo &#x3D; jwt.getClaim(&quot;token&quot;).asString();
-        return JSON.parseObject(tokenInfo, UserTokenDTO.class);
-    &#125;
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h4 id="说明："><a href="#说明：" class="headerlink" title="说明："></a>说明：</h4><ul>
-<li>生成的 token 中不带有过期时间，token 的过期时间由 redis 进行管理</li>
-<li>UserTokenDTO 中不带有敏感信息，如 password 字段不会出现在 token 中</li>
+</li>
+<li><p>自动配置原理</p>
+<ul>
+<li>springboot.autoconfigure 包保存了大量的自动配置类，对应每个常用的框架，使用 Java 代码对框架进行配置</li>
+<li>每个自动配置类生效的条件是：导入了对应的依赖 @ConditionOnClass({类.class})</li>
+<li>在 META-INF&#x2F;spring.factores 中把所有自动配置类的全名定义出来</li>
+<li>在 SpringBoot 类上有@SpringBootApplication 注解</li>
+<li>该注解由三个注解组成：<ul>
+<li>SpringbootConfiguration 代表该类作为配置类使用</li>
+<li>ComponentScan 对包进行扫描</li>
+<li>EnableAutoConfiguration 启动自动配置</li>
 </ul>
-<h3 id="Redis-工具类"><a href="#Redis-工具类" class="headerlink" title="Redis 工具类"></a>Redis 工具类</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java">public final class RedisServiceImpl implements RedisService &#123;
-    &#x2F;**
-     * 过期时长
-     *&#x2F;
-    private final Long DURATION &#x3D; 1 * 24 * 60 * 60 * 1000L;
-
-    @Resource
-    private RedisTemplate redisTemplate;
-
-    private ValueOperations&lt;String, String&gt; valueOperations;
-
-    @PostConstruct
-    public void init() &#123;
-        RedisSerializer redisSerializer &#x3D; new StringRedisSerializer();
-        redisTemplate.setKeySerializer(redisSerializer);
-        redisTemplate.setValueSerializer(redisSerializer);
-        redisTemplate.setHashKeySerializer(redisSerializer);
-        redisTemplate.setHashValueSerializer(redisSerializer);
-        valueOperations &#x3D; redisTemplate.opsForValue();
-    &#125;
-
-    @Override
-    public void set(String key, String value) &#123;
-        valueOperations.set(key, value, DURATION, TimeUnit.MILLISECONDS);
-        log.info(&quot;key&#x3D;&#123;&#125;, value is: &#123;&#125; into redis cache&quot;, key, value);
-    &#125;
-
-    @Override
-    public String get(String key) &#123;
-        String redisValue &#x3D; valueOperations.get(key);
-        log.info(&quot;get from redis, value is: &#123;&#125;&quot;, redisValue);
-        return redisValue;
-    &#125;
-
-    @Override
-    public boolean delete(String key) &#123;
-        boolean result &#x3D; redisTemplate.delete(key);
-        log.info(&quot;delete from redis, key is: &#123;&#125;&quot;, key);
-        return result;
-    &#125;
-
-    @Override
-    public Long getExpireTime(String key) &#123;
-        return valueOperations.getOperations().getExpire(key);
-    &#125;
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>RedisTemplate 简单封装</p>
-<h2 id="业务实现"><a href="#业务实现" class="headerlink" title="业务实现"></a>业务实现</h2><h3 id="登陆功能"><a href="#登陆功能" class="headerlink" title="登陆功能"></a>登陆功能</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java">public String login(LoginUserVO loginUserVO) &#123;
-    &#x2F;&#x2F;1.判断用户名密码是否正确
-    UserPO userPO &#x3D; userMapper.getByUsername(loginUserVO.getUsername());
-    if (userPO &#x3D;&#x3D; null) &#123;
-        throw new UserException(ErrorCodeEnum.TNP1001001);
-    &#125;
-    if (!loginUserVO.getPassword().equals(userPO.getPassword())) &#123;
-        throw new UserException(ErrorCodeEnum.TNP1001002);
-    &#125;
-
-    &#x2F;&#x2F;2.用户名密码正确生成token
-    UserTokenDTO userTokenDTO &#x3D; new UserTokenDTO();
-    PropertiesUtil.copyProperties(userTokenDTO, loginUserVO);
-    userTokenDTO.setId(userPO.getId());
-    userTokenDTO.setGmtCreate(System.currentTimeMillis());
-    String token &#x3D; JWTUtil.generateToken(userTokenDTO);
-
-    &#x2F;&#x2F;3.存入token至redis
-    redisService.set(userPO.getId(), token);
-    return token;
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h4 id="说明：-1"><a href="#说明：-1" class="headerlink" title="说明："></a>说明：</h4><ul>
-<li>判断用户名密码是否正确</li>
-<li>用户名密码正确则生成 token</li>
-<li>将生成的 token 保存至 redis</li>
+</li>
+<li>在 EnableAutoConfiguration 注解的 XXSelector 源码中，会读取 spring.factores 文件，通过反射将所有的自动配置类加载到内存中，启动了自动配置</li>
 </ul>
-<h3 id="登出功能"><a href="#登出功能" class="headerlink" title="登出功能"></a>登出功能</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java">public boolean loginOut(String id) &#123;
-     boolean result &#x3D; redisService.delete(id);
-     if (!redisService.delete(id)) &#123;
-        throw new UserException(ErrorCodeEnum.TNP1001003);
-     &#125;
-
-     return result;
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>将对应的 key 删除即可</p>
-<h3 id="更新密码功能"><a href="#更新密码功能" class="headerlink" title="更新密码功能"></a>更新密码功能</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java">public String updatePassword(UpdatePasswordUserVO updatePasswordUserVO) &#123;
-    &#x2F;&#x2F;1.修改密码
-    UserPO userPO &#x3D; UserPO.builder().password(updatePasswordUserVO.getPassword())
-            .id(updatePasswordUserVO.getId())
-            .build();
-    UserPO user &#x3D; userMapper.getById(updatePasswordUserVO.getId());
-    if (user &#x3D;&#x3D; null) &#123;
-        throw new UserException(ErrorCodeEnum.TNP1001001);
-    &#125;
-
-    if (userMapper.updatePassword(userPO) !&#x3D; 1) &#123;
-        throw new UserException(ErrorCodeEnum.TNP1001005);
-    &#125;
-    &#x2F;&#x2F;2.生成新的token
-    UserTokenDTO userTokenDTO &#x3D; UserTokenDTO.builder()
-            .id(updatePasswordUserVO.getId())
-            .username(user.getUsername())
-            .gmtCreate(System.currentTimeMillis()).build();
-    String token &#x3D; JWTUtil.generateToken(userTokenDTO);
-    &#x2F;&#x2F;3.更新token
-    redisService.set(user.getId(), token);
-    return token;
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h4 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h4><blockquote>
-<p>更新用户密码时需要重新生成新的 token，并将新的 token 返回给前端，由前端更新保存在 local storage 中的 token，同时更新存储在 redis 中的 token，这样实现可以避免用户重新登陆，用户体验感不至于太差</p>
-</blockquote>
-<h4 id="其他说明"><a href="#其他说明" class="headerlink" title="其他说明"></a>其他说明</h4><p>在实际项目中，用户分为普通用户和管理员用户，只有管理员用户拥有删除用户的权限，这一块功能也是涉及 token 操作的，但是我太懒了，demo 工程就不写了</p>
-<p>在实际项目中，密码传输是加密过的</p>
-<h3 id="拦截器类"><a href="#拦截器类" class="headerlink" title="拦截器类"></a>拦截器类</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java">public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
-                             Object handler) throws Exception &#123;
-    String authToken &#x3D; request.getHeader(&quot;Authorization&quot;);
-    String token &#x3D; authToken.substring(&quot;Bearer&quot;.length() + 1).trim();
-    UserTokenDTO userTokenDTO &#x3D; JWTUtil.parseToken(token);
-    &#x2F;&#x2F;1.判断请求是否有效
-    if (redisService.get(userTokenDTO.getId()) &#x3D;&#x3D; null
-            || !redisService.get(userTokenDTO.getId()).equals(token)) &#123;
-        return false;
-    &#125;
-
-    &#x2F;&#x2F;2.判断是否需要续期
-    if (redisService.getExpireTime(userTokenDTO.getId()) &lt; 1 * 60 * 30) &#123;
-        redisService.set(userTokenDTO.getId(), token);
-        log.error(&quot;update token info, id is:&#123;&#125;, user info is:&#123;&#125;&quot;, userTokenDTO.getId(), token);
-    &#125;
-    return true;
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h4 id="说明：-2"><a href="#说明：-2" class="headerlink" title="说明："></a>说明：</h4><p>拦截器中主要做两件事，一是对 token 进行校验，二是判断 token 是否需要进行续期</p>
-<h5 id="token-校验："><a href="#token-校验：" class="headerlink" title="token 校验："></a>token 校验：</h5><ul>
-<li>判断 id 对应的 token 是否不存在，不存在则 token 过期</li>
-<li>若 token 存在则比较 token 是否一致，保证同一时间只有一个用户操作</li>
+</li>
 </ul>
-<h5 id="token-自动续期："><a href="#token-自动续期：" class="headerlink" title="token 自动续期："></a>token 自动续期：</h5><p>为了不频繁操作 redis，只有当离过期时间只有 30 分钟时才更新过期时间</p>
-<h3 id="拦截器配置类"><a href="#拦截器配置类" class="headerlink" title="拦截器配置类"></a>拦截器配置类</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java">@Configuration
-public class InterceptorConfig implements WebMvcConfigurer &#123;
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) &#123;
-        registry.addInterceptor(authenticateInterceptor())
-                .excludePathPatterns(&quot;&#x2F;logout&#x2F;**&quot;)
-                .excludePathPatterns(&quot;&#x2F;login&#x2F;**&quot;)
-                .addPathPatterns(&quot;&#x2F;**&quot;);
-    &#125;
-
-    @Bean
-    public AuthenticateInterceptor authenticateInterceptor() &#123;
-        return new AuthenticateInterceptor();
-    &#125;
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ol>
+<li>springboot 有哪些特性</li>
+</ol>
+<ul>
+<li>遵循习惯优于配置的原则。使用 springboot 我们只需要很少的配置，大多数使用默认配置即可</li>
+<li>项目快速搭建。springboot 帮助开发者快速搭建 spring 框架，可无需配置的自动整合第三方框架</li>
+<li>可以完全不使用 xml 配置，只需要自动配置和 Java config</li>
+<li>内嵌 servlet 容器，降低了对环境的要求，可用命令直接执行项目</li>
+<li>提供了 starter POM，能够非常方便的进行包管理</li>
+<li>对主流框架无配置集成</li>
+<li>与云计算天然集成</li>
+</ul>
 
                 
             </div>
@@ -810,9 +618,9 @@ public class InterceptorConfig implements WebMvcConfigurer &#123;
             <br/>
             <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text"
                   property="dct:title" rel="dct:type">
-                    《JWT登录认证以及自动续期》
+                    《springboot面试题目》
                 </span> by
-            <a xmlns:cc="http://creativecommons.org/ns#" href="/2022/05/24/jwt-deng-lu-ren-zheng-yi-ji-zi-dong-xu-qi/" property="cc:attributionName"
+            <a xmlns:cc="http://creativecommons.org/ns#" href="/2022/07/13/springboot-mian-shi-ti-mu/" property="cc:attributionName"
                rel="cc:attributionURL">
                 Nevan
             </a> under
@@ -839,20 +647,12 @@ public class InterceptorConfig implements WebMvcConfigurer &#123;
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/jwt/">
-                                    <span class="chip bg-color">jwt</span>
-                                </a>
-                            
-                                <a href="/tags/%E8%87%AA%E5%8A%A8%E7%BB%AD%E6%9C%9F/">
-                                    <span class="chip bg-color">自动续期</span>
-                                </a>
-                            
                                 <a href="/tags/java/">
                                     <span class="chip bg-color">java</span>
                                 </a>
                             
-                                <a href="/tags/oauth/">
-                                    <span class="chip bg-color">oauth</span>
+                                <a href="/tags/springboot/">
+                                    <span class="chip bg-color">springboot</span>
                                 </a>
                             
                         </div>
@@ -1026,9 +826,10 @@ public class InterceptorConfig implements WebMvcConfigurer &#123;
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/2022/07/13/springboot-mian-shi-ti-mu/">
                     <div class="card-image">
@@ -1046,9 +847,9 @@ public class InterceptorConfig implements WebMvcConfigurer &#123;
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2022-07-13
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-07-13
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -1065,6 +866,7 @@ public class InterceptorConfig implements WebMvcConfigurer &#123;
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -1087,13 +889,13 @@ public class InterceptorConfig implements WebMvcConfigurer &#123;
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2022/05/18/ru-he-pan-duan-this-bang-ding/">
+                <a href="/2022/05/24/jwt-deng-lu-ren-zheng-yi-ji-zi-dong-xu-qi/">
                     <div class="card-image">
                         
                         
-                        <img src="https://cdn.jsdelivr.net/gh/cyf1215239326/cyf1215239326.github.io/medias/featureimages/20.jpg" class="responsive-img" alt="如何判断this绑定">
+                        <img src="https://cdn.jsdelivr.net/gh/cyf1215239326/cyf1215239326.github.io/medias/featureimages/11.jpg" class="responsive-img" alt="JWT登录认证以及自动续期">
                         
-                        <span class="card-title">如何判断this绑定</span>
+                        <span class="card-title">JWT登录认证以及自动续期</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -1104,14 +906,14 @@ public class InterceptorConfig implements WebMvcConfigurer &#123;
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-05-18
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-05-24
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Javascript/" class="post-category">
-                                    Javascript
+                            <a href="/categories/JWT/" class="post-category">
+                                    JWT
                                 </a>
                             
                             
@@ -1121,12 +923,20 @@ public class InterceptorConfig implements WebMvcConfigurer &#123;
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/javascript/">
-                        <span class="chip bg-color">javascript</span>
+                    <a href="/tags/jwt/">
+                        <span class="chip bg-color">jwt</span>
                     </a>
                     
-                    <a href="/tags/this/">
-                        <span class="chip bg-color">this</span>
+                    <a href="/tags/%E8%87%AA%E5%8A%A8%E7%BB%AD%E6%9C%9F/">
+                        <span class="chip bg-color">自动续期</span>
+                    </a>
+                    
+                    <a href="/tags/java/">
+                        <span class="chip bg-color">java</span>
+                    </a>
+                    
+                    <a href="/tags/oauth/">
+                        <span class="chip bg-color">oauth</span>
                     </a>
                     
                 </div>
