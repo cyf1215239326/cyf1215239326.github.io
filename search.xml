@@ -1,6 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>BFC</title>
+    <url>/2022/05/16/bfc/</url>
+    <content><![CDATA[<h1 id="完全弄懂-BFC"><a href="#完全弄懂-BFC" class="headerlink" title="完全弄懂 BFC"></a>完全弄懂 BFC</h1><p>BFC 全称是 Block Formatting Context，即块级格式化上下文。</p>
+<p>BFC 最初被定义在 css2.1 规范的 Visual formatting model 中。要想明白 BFC 到底是什么，首先看看什么是 visual formatting model</p>
+<h2 id="视觉格式化模型（Visual-Formatting-Model）"><a href="#视觉格式化模型（Visual-Formatting-Model）" class="headerlink" title="视觉格式化模型（Visual Formatting Model）"></a>视觉格式化模型（Visual Formatting Model）</h2><p>视觉格式化模型是用来处理文档并将它显示在视觉媒体上得机制，它让视觉媒体知道如何吃力文档。（视觉媒体-user agent 通常指的是浏览器。）</p>
+<p>在时候也格式化模型中铭文当属的每个元素根据盒模型生成零个或多个盒子。这些盒子的布局受一下因素控制：盒子得尺寸和类型、定位方案（普通文档流、浮动文档流和绝对定位流）、文档树中元素间的关系、外部因素（如视口大小、图像本身的尺寸等）</p>
+<h2 id="普通文档流"><a href="#普通文档流" class="headerlink" title="普通文档流"></a>普通文档流</h2><p>普通文档流是一种定位方案。<br>在 css2.1 中，普通文档流包括：块级盒子的块级格式化上下文、内联级盒子的内联格式化上下文、块级和内联级盒子的相对定位</p>
+<p>在普通文档流的盒子属于格式化上下文（formatting context）。可以属于块级或者内联级，但不能同时属于。块级盒子属于块级格式化上下文。内联盒子属于内联格式化上下文。</p>
+<h2 id="格式化上下文（formatting-context）"><a href="#格式化上下文（formatting-context）" class="headerlink" title="格式化上下文（formatting context）"></a>格式化上下文（formatting context）</h2><p>Formatting Context,即格式化上下文。用于决定如何渲染文档的一个区域</p>
+<p>不同的盒子使用不同的格式化上下文来布局</p>
+<p>每个格式化上下文都拥有一套不同的渲染规则，他决定了其子元素将如何定位，以及和其他元素的关系和相互作用。</p>
+<p>简单理解为格式化上下文就是<strong>为盒子准备的一套渲染规则</strong>。</p>
+<p>常见的格式化上下文有这样几种：</p>
+<p>【Block formatting context】(BFC)</p>
+<p>【Inline formatting context】(IFC)</p>
+<p>【Grid formatting context】(GFC)</p>
+<p>【Flex formatting context】(FFC)</p>
+<h2 id="什么是-BFC"><a href="#什么是-BFC" class="headerlink" title="什么是 BFC"></a>什么是 BFC</h2><p>BFC 即 Block Formatting Context（块级格式化上下文）。</p>
+<p>先来看看 W3C 对于 BFC</p>
+<blockquote>
+<p>Floats, absolutely positioned elements, block containers (such as inline-blocks, table-cells, and table-captions) that are not block boxes, and block boxes with ‘overflow’ other than ‘visible’ (except when that value has been propagated to the viewport) establish new block formatting contexts for their contents.</p>
+</blockquote>
+<p>也就是，有这几种情况会创建 BFC：</p>
+<ul>
+<li>根元素（html）或者其他包含它的元素</li>
+<li>浮动元素</li>
+<li>绝对定位元素</li>
+<li>非块级盒子的块级容器（inline-block，table-cells，table-captions 等）</li>
+<li>overflow 部位 visible 的块级盒子</li>
+</ul>
+<p>BFC 的范围</p>
+<blockquote>
+<p>A block formatting context contains everything inside of the element creating it that is not also inside a descendant element that creates a new block formatting context.</p>
+</blockquote>
+<p>一个 BFC 包含创建该上下文元素的所有子元素，但不包括创建了新 BFC 的子元素的内部元素。</p>
+<p>换句话说，一个元素不能同时存在两个 BFC 中。</p>
+<h2 id="BFC-的特性"><a href="#BFC-的特性" class="headerlink" title="BFC 的特性"></a>BFC 的特性</h2><ul>
+<li>盒子从顶部开始垂直排列</li>
+<li>两个相邻的盒子之间的垂直距离由外边距（即 margin）决定</li>
+<li>块级格式化上下文中相邻的盒子之间在垂直边距折叠</li>
+<li>每个盒子的左外边与容器的左边接触（从右到左的格式化则相反），即使存在浮动也是如此，除非盒子建立了新的块格式化上下文</li>
+<li>形成了 BFC 的区域不会与 float box 重叠</li>
+<li>计算 BFC 的高度时，浮动子元素也参与计算</li>
+</ul>
+<h2 id="从实际代码来分析-BFC"><a href="#从实际代码来分析-BFC" class="headerlink" title="从实际代码来分析 BFC"></a>从实际代码来分析 BFC</h2><pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token doctype"><span class="token punctuation">&lt;!</span><span class="token doctype-tag">DOCTYPE</span> <span class="token name">html</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>html</span> <span class="token attr-name">lang</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>en<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>head</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>meta</span> <span class="token attr-name">charset</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>UTF-8<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>meta</span> <span class="token attr-name">http-equiv</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>X-UA-Compatible<span class="token punctuation">"</span></span> <span class="token attr-name">content</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>IE=edge<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>meta</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>viewport<span class="token punctuation">"</span></span> <span class="token attr-name">content</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>width=device-width, initial-scale=1.0<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>title</span><span class="token punctuation">></span></span>BFC<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>title</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>style</span><span class="token punctuation">></span></span><span class="token style"><span class="token language-css">
+      <span class="token selector">*</span> <span class="token punctuation">&#123;</span>
+        <span class="token property">margin</span><span class="token punctuation">:</span> 0<span class="token punctuation">;</span>
+        <span class="token property">padding</span><span class="token punctuation">:</span> 0<span class="token punctuation">;</span>
+      <span class="token punctuation">&#125;</span>
+
+      <span class="token selector">.green</span> <span class="token punctuation">&#123;</span>
+        <span class="token property">background</span><span class="token punctuation">:</span> #73de80<span class="token punctuation">;</span>
+        <span class="token property">opacity</span><span class="token punctuation">:</span> 0.5<span class="token punctuation">;</span>
+        <span class="token property">border</span><span class="token punctuation">:</span> 3px solid #f31264<span class="token punctuation">;</span>
+        <span class="token property">width</span><span class="token punctuation">:</span> 200px<span class="token punctuation">;</span>
+        <span class="token property">height</span><span class="token punctuation">:</span> 200px<span class="token punctuation">;</span>
+        <span class="token property">float</span><span class="token punctuation">:</span> left<span class="token punctuation">;</span>
+      <span class="token punctuation">&#125;</span>
+
+      <span class="token selector">.red</span> <span class="token punctuation">&#123;</span>
+        <span class="token property">background</span><span class="token punctuation">:</span> #ef5be2<span class="token punctuation">;</span>
+        <span class="token property">opacity</span><span class="token punctuation">:</span> 0.5<span class="token punctuation">;</span>
+        <span class="token property">border</span><span class="token punctuation">:</span> 3px solid #f31264<span class="token punctuation">;</span>
+        <span class="token property">width</span><span class="token punctuation">:</span> 400px<span class="token punctuation">;</span>
+        <span class="token property">min-height</span><span class="token punctuation">:</span> 100px<span class="token punctuation">;</span>
+      <span class="token punctuation">&#125;</span>
+
+      <span class="token selector">.gray</span> <span class="token punctuation">&#123;</span>
+        <span class="token property">background</span><span class="token punctuation">:</span> #888<span class="token punctuation">;</span>
+        <span class="token property">height</span><span class="token punctuation">:</span> 100%<span class="token punctuation">;</span>
+        <span class="token property">margin-left</span><span class="token punctuation">:</span> 50px<span class="token punctuation">;</span>
+      <span class="token punctuation">&#125;</span>
+    </span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>style</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>head</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>body</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>gray<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>green<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>red<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><img src="/2022/05/16/bfc/BFC1.png" alt="BFC1"></p>
+<p>在这个例子中，构建出BFC的只有class名为green的盒子（浮动元素）</p>
+<p>green盒子由于浮动，脱离普通文档流,形成浮动流。他好像跟其他两个盒子不在同一个世界一样。</p>
+<p>现在普通文档流中只有gray和red盒子，所以gray的高度只被red撑起来。红色盒子也无视绿色盒子的存在，跑到了最左边。</p>
+<h2 id="实例二"><a href="#实例二" class="headerlink" title="实例二"></a>实例二</h2><p>如果想要让灰色框包裹住绿色，最简单的方式就是给gray盒子构建出BFC</p>
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup">.gray&#123;
+  background:#888;
+  height: 100%;
+
+  overflow: hidden;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="/2022/05/16/bfc/BFC2.png" alt="BFC2"></p>
+<p>还记得BFC的特性吗？当我们计算BFC的高度时，浮动子元素也参与计算。这样一来我们就能灰色盒子的高度被绿色盒子撑开了。</p>
+<h2 id="实例三"><a href="#实例三" class="headerlink" title="实例三"></a>实例三</h2><p>我们再来看看如何让红色盒子“接受”绿色盒子</p>
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup">.red &#123;
+  background: #EF5BE2;
+  opacity: 0.5;
+  border: 3px solid #F31264;
+  width: 400px;
+  min-height: 100px;
+
+  overflow: hidden;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="/2022/05/16/bfc/BFC3.png" alt="BFC3"></p>
+<p>我们将红色盒子也构建出BFC，根据特性，形成BFC区域与float box不会发生重叠。于是这里红色成功“接受”了绿色盒子。</p>
+]]></content>
+      <categories>
+        <category>BFC</category>
+      </categories>
+      <tags>
+        <tag>css</tag>
+        <tag>html</tag>
+        <tag>bfc</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Context-isolation</title>
     <url>/2022/05/07/context-isolation/</url>
     <content><![CDATA[<h2 id="contextIsolation-上下文隔离"><a href="#contextIsolation-上下文隔离" class="headerlink" title="contextIsolation 上下文隔离"></a>contextIsolation 上下文隔离</h2><p>上下文隔离是一项功能，可确保你的<code>preload</code>脚本和electron的内部逻辑都在与您加载到<code>webContents</code>，这对于安全目的很重要，因为它有助于防止网站访问Electron内部或您的预加载脚本可以访问强大API。</p>
@@ -331,62 +456,6 @@ public class InterceptorConfig implements WebMvcConfigurer &#123;
       </tags>
   </entry>
   <entry>
-    <title>js中arguments</title>
-    <url>/2022/05/17/js-zhong-arguments/</url>
-    <content><![CDATA[<h2 id="JS-中的-arguments-对象"><a href="#JS-中的-arguments-对象" class="headerlink" title="JS 中的 arguments 对象"></a>JS 中的 arguments 对象</h2><h3 id="1-在调用函数时，浏览器每次都会传递两个隐匿的参数"><a href="#1-在调用函数时，浏览器每次都会传递两个隐匿的参数" class="headerlink" title="1.在调用函数时，浏览器每次都会传递两个隐匿的参数"></a>1.在调用函数时，浏览器每次都会传递两个隐匿的参数</h3><ul>
-<li>函数的上下文对象</li>
-<li>封装实参的对象 arguments</li>
-</ul>
-<h3 id="2-arguments-是一个类数组对象，也可以获取长度"><a href="#2-arguments-是一个类数组对象，也可以获取长度" class="headerlink" title="2.arguments 是一个类数组对象，也可以获取长度"></a>2.arguments 是一个类数组对象，也可以获取长度</h3><ul>
-<li>在调用函数时，传递的实参都会保存子 arguments 中，arguments.length 就是实参的个数。</li>
-<li>即使不在函数中定义形参，也可以通过 arguments 来使用实参，<strong>不过使用起来比较麻烦</strong></li>
-</ul>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">list</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>arguements <span class="token keyword">instanceof</span> <span class="token class-name">Array</span><span class="token punctuation">)</span> <span class="token comment">//检查arguements是不是数组</span>
-  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>Array<span class="token punctuation">.</span><span class="token function">isArray</span><span class="token punctuation">(</span>arguements<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">//使用Array的isArray()方法来检查arguements是不是一个数组</span>
-  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>arguements<span class="token punctuation">.</span>length<span class="token punctuation">)</span> <span class="token comment">//这里的arguements.length就是传递进来的实参的长度（个数）</span>
-  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>arguements<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token comment">//输出索引为1的实参</span>
-
-  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>arguements<span class="token punctuation">.</span>callee<span class="token punctuation">)</span> <span class="token comment">//输出的结果就是当前执行的函数，与console.log(list());相同</span>
-<span class="token punctuation">&#125;</span>
-
-<span class="token function">list</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="3-它里面有一个属性叫callee，这个属性对应一个函数对象，就是当前正在执行的函数对象"><a href="#3-它里面有一个属性叫callee，这个属性对应一个函数对象，就是当前正在执行的函数对象" class="headerlink" title="3.它里面有一个属性叫callee，这个属性对应一个函数对象，就是当前正在执行的函数对象"></a>3.它里面有一个属性叫callee，这个属性对应一个函数对象，就是当前正在执行的函数对象</h3>]]></content>
-      <categories>
-        <category>Javascript</category>
-      </categories>
-      <tags>
-        <tag>javascript</tag>
-        <tag>arguments</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Hello World</title>
-    <url>/2022/05/07/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo new &quot;My New Post&quot;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo server<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo generate<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo deploy<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
-      <categories>
-        <category>Helloworld</category>
-      </categories>
-      <tags>
-        <tag>blog</tag>
-        <tag>hexo</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>git仓库下面另一个clone过来的仓库的提交问题</title>
     <url>/2022/05/07/git-cang-ku-xia-mian-ling-yi-ge-clone-guo-lai-de-cang-ku-de-ti-jiao-wen-ti/</url>
     <content><![CDATA[<p>如果你的 git 仓库下面还有另外的 clone 过来的仓库，那么在你正常的提交代码时<code>git commit</code>的时候一定会出现如下图的错误</p>
@@ -426,135 +495,35 @@ D:\blog\nevan-blog&gt;<span aria-hidden="true" class="line-numbers-rows"><span><
         <category>Hexo</category>
       </categories>
       <tags>
-        <tag>blog</tag>
         <tag>hexo</tag>
+        <tag>blog</tag>
         <tag>搭建</tag>
         <tag>git</tag>
       </tags>
   </entry>
   <entry>
-    <title>BFC</title>
-    <url>/2022/05/16/bfc/</url>
-    <content><![CDATA[<h1 id="完全弄懂-BFC"><a href="#完全弄懂-BFC" class="headerlink" title="完全弄懂 BFC"></a>完全弄懂 BFC</h1><p>BFC 全称是 Block Formatting Context，即块级格式化上下文。</p>
-<p>BFC 最初被定义在 css2.1 规范的 Visual formatting model 中。要想明白 BFC 到底是什么，首先看看什么是 visual formatting model</p>
-<h2 id="视觉格式化模型（Visual-Formatting-Model）"><a href="#视觉格式化模型（Visual-Formatting-Model）" class="headerlink" title="视觉格式化模型（Visual Formatting Model）"></a>视觉格式化模型（Visual Formatting Model）</h2><p>视觉格式化模型是用来处理文档并将它显示在视觉媒体上得机制，它让视觉媒体知道如何吃力文档。（视觉媒体-user agent 通常指的是浏览器。）</p>
-<p>在时候也格式化模型中铭文当属的每个元素根据盒模型生成零个或多个盒子。这些盒子的布局受一下因素控制：盒子得尺寸和类型、定位方案（普通文档流、浮动文档流和绝对定位流）、文档树中元素间的关系、外部因素（如视口大小、图像本身的尺寸等）</p>
-<h2 id="普通文档流"><a href="#普通文档流" class="headerlink" title="普通文档流"></a>普通文档流</h2><p>普通文档流是一种定位方案。<br>在 css2.1 中，普通文档流包括：块级盒子的块级格式化上下文、内联级盒子的内联格式化上下文、块级和内联级盒子的相对定位</p>
-<p>在普通文档流的盒子属于格式化上下文（formatting context）。可以属于块级或者内联级，但不能同时属于。块级盒子属于块级格式化上下文。内联盒子属于内联格式化上下文。</p>
-<h2 id="格式化上下文（formatting-context）"><a href="#格式化上下文（formatting-context）" class="headerlink" title="格式化上下文（formatting context）"></a>格式化上下文（formatting context）</h2><p>Formatting Context,即格式化上下文。用于决定如何渲染文档的一个区域</p>
-<p>不同的盒子使用不同的格式化上下文来布局</p>
-<p>每个格式化上下文都拥有一套不同的渲染规则，他决定了其子元素将如何定位，以及和其他元素的关系和相互作用。</p>
-<p>简单理解为格式化上下文就是<strong>为盒子准备的一套渲染规则</strong>。</p>
-<p>常见的格式化上下文有这样几种：</p>
-<p>【Block formatting context】(BFC)</p>
-<p>【Inline formatting context】(IFC)</p>
-<p>【Grid formatting context】(GFC)</p>
-<p>【Flex formatting context】(FFC)</p>
-<h2 id="什么是-BFC"><a href="#什么是-BFC" class="headerlink" title="什么是 BFC"></a>什么是 BFC</h2><p>BFC 即 Block Formatting Context（块级格式化上下文）。</p>
-<p>先来看看 W3C 对于 BFC</p>
-<blockquote>
-<p>Floats, absolutely positioned elements, block containers (such as inline-blocks, table-cells, and table-captions) that are not block boxes, and block boxes with ‘overflow’ other than ‘visible’ (except when that value has been propagated to the viewport) establish new block formatting contexts for their contents.</p>
-</blockquote>
-<p>也就是，有这几种情况会创建 BFC：</p>
-<ul>
-<li>根元素（html）或者其他包含它的元素</li>
-<li>浮动元素</li>
-<li>绝对定位元素</li>
-<li>非块级盒子的块级容器（inline-block，table-cells，table-captions 等）</li>
-<li>overflow 部位 visible 的块级盒子</li>
-</ul>
-<p>BFC 的范围</p>
-<blockquote>
-<p>A block formatting context contains everything inside of the element creating it that is not also inside a descendant element that creates a new block formatting context.</p>
-</blockquote>
-<p>一个 BFC 包含创建该上下文元素的所有子元素，但不包括创建了新 BFC 的子元素的内部元素。</p>
-<p>换句话说，一个元素不能同时存在两个 BFC 中。</p>
-<h2 id="BFC-的特性"><a href="#BFC-的特性" class="headerlink" title="BFC 的特性"></a>BFC 的特性</h2><ul>
-<li>盒子从顶部开始垂直排列</li>
-<li>两个相邻的盒子之间的垂直距离由外边距（即 margin）决定</li>
-<li>块级格式化上下文中相邻的盒子之间在垂直边距折叠</li>
-<li>每个盒子的左外边与容器的左边接触（从右到左的格式化则相反），即使存在浮动也是如此，除非盒子建立了新的块格式化上下文</li>
-<li>形成了 BFC 的区域不会与 float box 重叠</li>
-<li>计算 BFC 的高度时，浮动子元素也参与计算</li>
-</ul>
-<h2 id="从实际代码来分析-BFC"><a href="#从实际代码来分析-BFC" class="headerlink" title="从实际代码来分析 BFC"></a>从实际代码来分析 BFC</h2><pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token doctype"><span class="token punctuation">&lt;!</span><span class="token doctype-tag">DOCTYPE</span> <span class="token name">html</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>html</span> <span class="token attr-name">lang</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>en<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>head</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>meta</span> <span class="token attr-name">charset</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>UTF-8<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>meta</span> <span class="token attr-name">http-equiv</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>X-UA-Compatible<span class="token punctuation">"</span></span> <span class="token attr-name">content</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>IE=edge<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>meta</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>viewport<span class="token punctuation">"</span></span> <span class="token attr-name">content</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>width=device-width, initial-scale=1.0<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>title</span><span class="token punctuation">></span></span>BFC<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>title</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>style</span><span class="token punctuation">></span></span><span class="token style"><span class="token language-css">
-      <span class="token selector">*</span> <span class="token punctuation">&#123;</span>
-        <span class="token property">margin</span><span class="token punctuation">:</span> 0<span class="token punctuation">;</span>
-        <span class="token property">padding</span><span class="token punctuation">:</span> 0<span class="token punctuation">;</span>
-      <span class="token punctuation">&#125;</span>
+    <title>Hello World</title>
+    <url>/2022/05/07/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo new &quot;My New Post&quot;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-      <span class="token selector">.green</span> <span class="token punctuation">&#123;</span>
-        <span class="token property">background</span><span class="token punctuation">:</span> #73de80<span class="token punctuation">;</span>
-        <span class="token property">opacity</span><span class="token punctuation">:</span> 0.5<span class="token punctuation">;</span>
-        <span class="token property">border</span><span class="token punctuation">:</span> 3px solid #f31264<span class="token punctuation">;</span>
-        <span class="token property">width</span><span class="token punctuation">:</span> 200px<span class="token punctuation">;</span>
-        <span class="token property">height</span><span class="token punctuation">:</span> 200px<span class="token punctuation">;</span>
-        <span class="token property">float</span><span class="token punctuation">:</span> left<span class="token punctuation">;</span>
-      <span class="token punctuation">&#125;</span>
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo server<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-      <span class="token selector">.red</span> <span class="token punctuation">&#123;</span>
-        <span class="token property">background</span><span class="token punctuation">:</span> #ef5be2<span class="token punctuation">;</span>
-        <span class="token property">opacity</span><span class="token punctuation">:</span> 0.5<span class="token punctuation">;</span>
-        <span class="token property">border</span><span class="token punctuation">:</span> 3px solid #f31264<span class="token punctuation">;</span>
-        <span class="token property">width</span><span class="token punctuation">:</span> 400px<span class="token punctuation">;</span>
-        <span class="token property">min-height</span><span class="token punctuation">:</span> 100px<span class="token punctuation">;</span>
-      <span class="token punctuation">&#125;</span>
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo generate<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-      <span class="token selector">.gray</span> <span class="token punctuation">&#123;</span>
-        <span class="token property">background</span><span class="token punctuation">:</span> #888<span class="token punctuation">;</span>
-        <span class="token property">height</span><span class="token punctuation">:</span> 100%<span class="token punctuation">;</span>
-        <span class="token property">margin-left</span><span class="token punctuation">:</span> 50px<span class="token punctuation">;</span>
-      <span class="token punctuation">&#125;</span>
-    </span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>style</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>head</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>body</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>gray<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>green<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>red<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo deploy<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<p><img src="/2022/05/16/bfc/BFC1.png" alt="BFC1"></p>
-<p>在这个例子中，构建出BFC的只有class名为green的盒子（浮动元素）</p>
-<p>green盒子由于浮动，脱离普通文档流,形成浮动流。他好像跟其他两个盒子不在同一个世界一样。</p>
-<p>现在普通文档流中只有gray和red盒子，所以gray的高度只被red撑起来。红色盒子也无视绿色盒子的存在，跑到了最左边。</p>
-<h2 id="实例二"><a href="#实例二" class="headerlink" title="实例二"></a>实例二</h2><p>如果想要让灰色框包裹住绿色，最简单的方式就是给gray盒子构建出BFC</p>
-<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup">.gray&#123;
-  background:#888;
-  height: 100%;
-
-  overflow: hidden;
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p><img src="/2022/05/16/bfc/BFC2.png" alt="BFC2"></p>
-<p>还记得BFC的特性吗？当我们计算BFC的高度时，浮动子元素也参与计算。这样一来我们就能灰色盒子的高度被绿色盒子撑开了。</p>
-<h2 id="实例三"><a href="#实例三" class="headerlink" title="实例三"></a>实例三</h2><p>我们再来看看如何让红色盒子“接受”绿色盒子</p>
-<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup">.red &#123;
-  background: #EF5BE2;
-  opacity: 0.5;
-  border: 3px solid #F31264;
-  width: 400px;
-  min-height: 100px;
-
-  overflow: hidden;
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p><img src="/2022/05/16/bfc/BFC3.png" alt="BFC3"></p>
-<p>我们将红色盒子也构建出BFC，根据特性，形成BFC区域与float box不会发生重叠。于是这里红色成功“接受”了绿色盒子。</p>
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
 ]]></content>
       <categories>
-        <category>BFC</category>
+        <category>Helloworld</category>
       </categories>
       <tags>
-        <tag>css</tag>
-        <tag>html</tag>
-        <tag>bfc</tag>
+        <tag>hexo</tag>
+        <tag>blog</tag>
       </tags>
   </entry>
   <entry>
@@ -590,6 +559,37 @@ const &#123; BrowserWindow &#125; &#x3D; require(&#39;@electron&#x2F;remote&#39;
       <tags>
         <tag>Electron</tag>
         <tag>remote</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>js中arguments</title>
+    <url>/2022/05/17/js-zhong-arguments/</url>
+    <content><![CDATA[<h2 id="JS-中的-arguments-对象"><a href="#JS-中的-arguments-对象" class="headerlink" title="JS 中的 arguments 对象"></a>JS 中的 arguments 对象</h2><h3 id="1-在调用函数时，浏览器每次都会传递两个隐匿的参数"><a href="#1-在调用函数时，浏览器每次都会传递两个隐匿的参数" class="headerlink" title="1.在调用函数时，浏览器每次都会传递两个隐匿的参数"></a>1.在调用函数时，浏览器每次都会传递两个隐匿的参数</h3><ul>
+<li>函数的上下文对象</li>
+<li>封装实参的对象 arguments</li>
+</ul>
+<h3 id="2-arguments-是一个类数组对象，也可以获取长度"><a href="#2-arguments-是一个类数组对象，也可以获取长度" class="headerlink" title="2.arguments 是一个类数组对象，也可以获取长度"></a>2.arguments 是一个类数组对象，也可以获取长度</h3><ul>
+<li>在调用函数时，传递的实参都会保存子 arguments 中，arguments.length 就是实参的个数。</li>
+<li>即使不在函数中定义形参，也可以通过 arguments 来使用实参，<strong>不过使用起来比较麻烦</strong></li>
+</ul>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">list</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>arguements <span class="token keyword">instanceof</span> <span class="token class-name">Array</span><span class="token punctuation">)</span> <span class="token comment">//检查arguements是不是数组</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>Array<span class="token punctuation">.</span><span class="token function">isArray</span><span class="token punctuation">(</span>arguements<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">//使用Array的isArray()方法来检查arguements是不是一个数组</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>arguements<span class="token punctuation">.</span>length<span class="token punctuation">)</span> <span class="token comment">//这里的arguements.length就是传递进来的实参的长度（个数）</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>arguements<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token comment">//输出索引为1的实参</span>
+
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>arguements<span class="token punctuation">.</span>callee<span class="token punctuation">)</span> <span class="token comment">//输出的结果就是当前执行的函数，与console.log(list());相同</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token function">list</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="3-它里面有一个属性叫callee，这个属性对应一个函数对象，就是当前正在执行的函数对象"><a href="#3-它里面有一个属性叫callee，这个属性对应一个函数对象，就是当前正在执行的函数对象" class="headerlink" title="3.它里面有一个属性叫callee，这个属性对应一个函数对象，就是当前正在执行的函数对象"></a>3.它里面有一个属性叫callee，这个属性对应一个函数对象，就是当前正在执行的函数对象</h3>]]></content>
+      <categories>
+        <category>Javascript</category>
+      </categories>
+      <tags>
+        <tag>javascript</tag>
+        <tag>arguments</tag>
       </tags>
   </entry>
   <entry>
@@ -650,6 +650,56 @@ const &#123; BrowserWindow &#125; &#x3D; require(&#39;@electron&#x2F;remote&#39;
       <tags>
         <tag>Front-end</tag>
         <tag>Internet</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>springboot面试题目</title>
+    <url>/2022/07/13/springboot-mian-shi-ti-mu/</url>
+    <content><![CDATA[<h1 id="springboot-面试题目"><a href="#springboot-面试题目" class="headerlink" title="springboot 面试题目"></a>springboot 面试题目</h1><ol>
+<li>描述一下 springboot 的作用</li>
+</ol>
+<ul>
+<li><p>自动依赖管理</p>
+<ul>
+<li>在 Springboot-dependency 中定义各种 jar 包的版本，进行导入，省去自己去导入的过程</li>
+</ul>
+</li>
+<li><p>自动配置原理</p>
+<ul>
+<li>springboot.autoconfigure 包保存了大量的自动配置类，对应每个常用的框架，使用 Java 代码对框架进行配置</li>
+<li>每个自动配置类生效的条件是：导入了对应的依赖 @ConditionOnClass({类.class})</li>
+<li>在 META-INF&#x2F;spring.factores 中把所有自动配置类的全名定义出来</li>
+<li>在 SpringBoot 类上有@SpringBootApplication 注解</li>
+<li>该注解由三个注解组成：<ul>
+<li>SpringbootConfiguration 代表该类作为配置类使用</li>
+<li>ComponentScan 对包进行扫描</li>
+<li>EnableAutoConfiguration 启动自动配置</li>
+</ul>
+</li>
+<li>在 EnableAutoConfiguration 注解的 XXSelector 源码中，会读取 spring.factores 文件，通过反射将所有的自动配置类加载到内存中，启动了自动配置</li>
+</ul>
+</li>
+</ul>
+<ol>
+<li>springboot 有哪些特性</li>
+</ol>
+<ul>
+<li>遵循习惯优于配置的原则。使用 springboot 我们只需要很少的配置，大多数使用默认配置即可</li>
+<li>项目快速搭建。springboot 帮助开发者快速搭建 spring 框架，可无需配置的自动整合第三方框架</li>
+<li>可以完全不使用 xml 配置，只需要自动配置和 Java config</li>
+<li>内嵌 servlet 容器，降低了对环境的要求，可用命令直接执行项目</li>
+<li>提供了 starter POM，能够非常方便的进行包管理</li>
+<li>对主流框架无配置集成</li>
+<li>与云计算天然集成</li>
+</ul>
+]]></content>
+      <categories>
+        <category>java</category>
+        <category>springboot</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>springboot</tag>
       </tags>
   </entry>
   <entry>
@@ -730,56 +780,6 @@ const &#123; BrowserWindow &#125; &#x3D; require(&#39;@electron&#x2F;remote&#39;
       </categories>
       <tags>
         <tag>正则</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>springboot面试题目</title>
-    <url>/2022/07/13/springboot-mian-shi-ti-mu/</url>
-    <content><![CDATA[<h1 id="springboot-面试题目"><a href="#springboot-面试题目" class="headerlink" title="springboot 面试题目"></a>springboot 面试题目</h1><ol>
-<li>描述一下 springboot 的作用</li>
-</ol>
-<ul>
-<li><p>自动依赖管理</p>
-<ul>
-<li>在 Springboot-dependency 中定义各种 jar 包的版本，进行导入，省去自己去导入的过程</li>
-</ul>
-</li>
-<li><p>自动配置原理</p>
-<ul>
-<li>springboot.autoconfigure 包保存了大量的自动配置类，对应每个常用的框架，使用 Java 代码对框架进行配置</li>
-<li>每个自动配置类生效的条件是：导入了对应的依赖 @ConditionOnClass({类.class})</li>
-<li>在 META-INF&#x2F;spring.factores 中把所有自动配置类的全名定义出来</li>
-<li>在 SpringBoot 类上有@SpringBootApplication 注解</li>
-<li>该注解由三个注解组成：<ul>
-<li>SpringbootConfiguration 代表该类作为配置类使用</li>
-<li>ComponentScan 对包进行扫描</li>
-<li>EnableAutoConfiguration 启动自动配置</li>
-</ul>
-</li>
-<li>在 EnableAutoConfiguration 注解的 XXSelector 源码中，会读取 spring.factores 文件，通过反射将所有的自动配置类加载到内存中，启动了自动配置</li>
-</ul>
-</li>
-</ul>
-<ol>
-<li>springboot 有哪些特性</li>
-</ol>
-<ul>
-<li>遵循习惯优于配置的原则。使用 springboot 我们只需要很少的配置，大多数使用默认配置即可</li>
-<li>项目快速搭建。springboot 帮助开发者快速搭建 spring 框架，可无需配置的自动整合第三方框架</li>
-<li>可以完全不使用 xml 配置，只需要自动配置和 Java config</li>
-<li>内嵌 servlet 容器，降低了对环境的要求，可用命令直接执行项目</li>
-<li>提供了 starter POM，能够非常方便的进行包管理</li>
-<li>对主流框架无配置集成</li>
-<li>与云计算天然集成</li>
-</ul>
-]]></content>
-      <categories>
-        <category>java</category>
-        <category>springboot</category>
-      </categories>
-      <tags>
-        <tag>java</tag>
-        <tag>springboot</tag>
       </tags>
   </entry>
   <entry>
